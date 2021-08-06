@@ -27,7 +27,8 @@ class ApiController extends AppController {
     public function beforeFilter(Event $event) {
         $this->Auth->allow(['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
 						  'register', 'forgotuser', 'logoutuser', 'getparameter', 'login', 'getuser',
-						  'updateuser', 'changepassword', 'books','lessons', 'setuserlesson']);
+						  'updateuser', 'changepassword', 'books','lessons', 'setuserlesson', 'userlessons', 'setusercoins'
+						, 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
 		//this->getEventManager()->off($this->Csrf);
@@ -143,7 +144,7 @@ class ApiController extends AppController {
 	  * Request method: get.
 	  *
 	  * Use example:
-	  * "https://ccnninos.org/lessons/1.json",
+	  * "https://miedd.samnaz.org/lessons/1.json",
 	  *
 	  * Result example:
 	  {
@@ -797,7 +798,7 @@ class ApiController extends AppController {
 	* Request method: POST.
 	*
 	* Use example:
-	* https://ccnninos.org/setuserlesson.json
+	* https://miedd.samnaz.org/setuserlesson.json
 	*
 	* Result example:
 	{
@@ -834,8 +835,8 @@ class ApiController extends AppController {
 		if ($usersTable->save($userRec)) {
 			// Obtener el Id del registro
 			$userLessonId = $userRec->Id;
-			
-			// TODO:Aquí acumular en users la variable coins
+			$pl = $connection->execute("update Users set Coins = Coins + ".$this->request->getData('Coins') ." where Id=$userId");
+		
 		} else {
 			throw new Exception('Error al guardar');
 		}
@@ -843,8 +844,183 @@ class ApiController extends AppController {
 		// Resp.
 		$response = array("userLessonId" => $userLessonId);
 		$this->set(compact('response'));
-		$this->viewBuilder()->setOption('serialize', ["response"]);		
+		//$this->viewBuilder()->setOption('serialize', ["response"]);		
+		$this->set('_serialize', ["response"]);
 	}
+
+	/*
+	  * @param Integer $bookId El id del libro
+	  *
+	  * @return 8|UserId, Name, LastName, City, BirthDate, TipoID, ID, Email
+	  */
+	public function userlessons($bookId = NULL, $userId = NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('UserLessons');
+		$this->set('userLessons', $this->UserLessons
+							->find('all')							
+							->contain('Lessons')->contain('Lessons.Books')->where(['Books.Id' => $bookId ])->where(['UserId' => $userId ])
+							->order(['Lessons.Day' => 'ASC'])->toArray());
+		$this->set('_serialize', ["userLessons"]);
+    }
+
+	/**
+	* Purpose: Registrar un usuario - monedas
+	*
+	* Request method: POST.
+	*
+	* Use example:
+	* https://miedd.samnaz.org/setusercoins.json
+	*
+	* Result example:
+	{
+		"response": {
+			"userCoinId": 4
+		}
+	}
+	*
+	* @return 1| userCoinId
+	*/
+	public function setusercoins() {
+		$this->request->allowMethod(['post']);
+		$userCoinId=0;
+		
+		// Usr. Id 
+		$userId = $this->request->getData('UserId');
+		
+		// Table
+		$connection = ConnectionManager::get('default');					
+		$usersTable = TableRegistry::get('UserCoins');
+				
+		// New rec.
+		$userRec = $usersTable->newEntity();
+		$userRec->UserId = $userId;			
+		$userRec->Created = date('Y-m-d H:i:s');		
+		$userRec->Category = $this->request->getData('Category');
+		$userRec->Coins = $this->request->getData('Coins');
+				
+		// Se guarda el reg.
+		if ($usersTable->save($userRec)) {
+			// Obtener el Id del registro
+			$userCoinId = $userRec->Id;
+			$pl = $connection->execute("update Users set Coins = Coins - ".$this->request->getData('Coins') ." where Id=$userId");
+		
+		} else {
+			throw new Exception('Error al guardar');
+		}
+
+		// Resp.
+		$response = array("userCoinId" => $userCoinId);
+		$this->set(compact('response'));
+		//$this->viewBuilder()->setOption('serialize', ["response"]);		
+		$this->set('_serialize', ["response"]);
+	}
+
+	/*
+	  * @param Integer $userId El id del usuario
+	  *
+	  * @return 2|Quant, Category
+	  */
+	  public function usercoins($userId = NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('UserCoins');
+		$query = $this->UserCoins
+							->find('all')							
+							->where(['UserId' => $userId ]);
+
+		$this->set('UserCoins', $query->select(['Quant' => $query->func()->sum('Coins'),
+			'Category' => 'Category'])->group('Category')->toArray());
+		$this->set('_serialize', ["UserCoins"]);
+    }
+
+	/*
+	  * @param Integer $lessonId El id de lección
+	  *
+	  * @return 2|Id, Description
+	  */
+	  public function lessontasks($lessonId = NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('LessonTasks');
+		$this->set('LessonTasks', $this->LessonTasks
+							->find('all')							
+							->where(['LessonId' => $lessonId ])->toArray());
+		$this->set('_serialize', ["LessonTasks"]);
+    }
+
+	/*
+	  * @param Integer $lessonId El id de lección
+	  *
+	  * @return 2|Id, Description
+	  */
+	  public function lessonchats($lessonId = NULL, $date = NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('LessonChats');
+		$this->set('LessonChats', $this->LessonChats
+							->find('all')->contain('Users')->select(['Name' => 'Name','LastName' => 'LastName',
+							'Created' => 'LessonChats.Created', 'Description' => 'LessonChats.Description'])					
+							->where(['LessonChats.Created >' => $date ])->where(['LessonId' => $lessonId ])
+							->order(['LessonChats.Created' => 'DESC'])->toArray());
+		$this->set('_serialize', ["LessonChats"]);
+    }
+
+	/**
+	* Purpose: Registrar un usuario - monedas
+	*
+	* Request method: POST.
+	*
+	* Use example:
+	* https://miedd.samnaz.org/setusercoins.json
+	*
+	* Result example:
+	{
+		"response": {
+			"userCoinId": 4
+		}
+	}
+	*
+	* @return 1| userCoinId
+	*/
+	public function setlessonchat() {
+		$this->request->allowMethod(['post']);
+		$lessonchatId=0;
+		
+		// Usr. Id 
+		$userId = $this->request->getData('UserId');
+		
+		// Table
+		$connection = ConnectionManager::get('default');					
+		$usersTable = TableRegistry::get('LessonChats');
+				
+		// New rec.
+		$userRec = $usersTable->newEntity();
+		$userRec->UserId = $userId;
+		$userRec->Created = date('Y-m-d H:i:s');
+		$userRec->LessonId = $this->request->getData('LessonId');
+		$userRec->Description = $this->request->getData('Description');
+				
+		// Se guarda el reg.
+		if ($usersTable->save($userRec)) {
+			// Obtener el Id del registro
+			$lessonchatId = $userRec->Id;
+		
+		} else {
+			throw new Exception('Error al guardar');
+		}
+
+		// Resp.
+		$response = array("lessonchatId" => $lessonchatId);
+		$this->set(compact('response'));
+		//$this->viewBuilder()->setOption('serialize', ["response"]);		
+		$this->set('_serialize', ["response"]);
+	}
+	
 }
 
 ?>

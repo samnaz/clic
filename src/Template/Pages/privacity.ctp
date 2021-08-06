@@ -27,7 +27,7 @@ if (!Configure::read('debug')) :
     );
 endif;
 
-$cakeDescription = 'CakePHP: the rapid development PHP framework';
+$cakeDescription = 'Clic: política de privacidad';
 ?>
 <!DOCTYPE html>
 <html>
