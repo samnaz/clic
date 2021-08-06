@@ -35,6 +35,11 @@ class LessonsTable extends Table
 		$this->hasMany('UserLessons', [
 			'foreignKey' => 'LessonId'
 		]);
+
+		//Relacion 1:N con la tabla LessonTasks
+		$this->hasMany('LessonTasks', [
+			'foreignKey' => 'LessonId'
+		]);
 	}
 	/*
 	function beforeDelete(Event $event, EntityInterface $entity, ArrayObject $options) {

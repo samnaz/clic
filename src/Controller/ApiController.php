@@ -860,7 +860,9 @@ class ApiController extends AppController {
 		$this->loadModel('UserLessons');
 		$this->set('userLessons', $this->UserLessons
 							->find('all')							
-							->contain('Lessons')->contain('Lessons.Books')->where(['Books.Id' => $bookId ])->where(['UserId' => $userId ])
+							->contain('Lessons')->contain('Lessons.Books')
+							->contain('Lessons.LessonTasks')->contain('Lessons.LessonTasks.UserLessonTasks')
+							->where(['Books.Id' => $bookId ])->where(['UserLessons.UserId' => $userId ])
 							->order(['Lessons.Day' => 'ASC'])->toArray());
 		$this->set('_serialize', ["userLessons"]);
     }

@@ -25,6 +25,13 @@ class LessonTasksTable extends Table
 			'foreignKey' => 'LessonId',
 			'type' => 'INNER'
 		]);
+
+		//Relacion 1:n con la tabla UserRols
+		$this->hasMany('UserLessonTasks', [
+			'foreignKey' => 'TaskId',
+		]);
+		
+		
 	}
 }
 ?>
