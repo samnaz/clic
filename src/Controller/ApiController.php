@@ -28,7 +28,7 @@ class ApiController extends AppController {
         $this->Auth->allow(['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
 						  'register', 'forgotuser', 'logoutuser', 'getparameter', 'login', 'getuser',
 						  'updateuser', 'changepassword', 'books','lessons', 'setuserlesson', 'userlessons', 'setusercoins'
-						, 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat']);
+						, 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat', 'setuserlessontasks', 'lessonchatusers']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
 		//this->getEventManager()->off($this->Csrf);
@@ -957,16 +957,17 @@ class ApiController extends AppController {
 	  *
 	  * @return 2|Id, Description
 	  */
-	  public function lessonchats($lessonId = NULL, $date = NULL) {
+	  public function lessonchats($lessonId = NULL, $teacherId=NULL, $date = NULL) {
 		$this->request->allowMethod(['get']);
 		
 		// Importar el modelo
 		$this->loadModel('LessonChats');
 		$this->set('LessonChats', $this->LessonChats
-							->find('all')->contain('Users')->select(['Name' => 'Name','LastName' => 'LastName',
-							'Created' => 'LessonChats.Created', 'Description' => 'LessonChats.Description'])					
-							->where(['LessonChats.Created >' => $date ])->where(['LessonId' => $lessonId ])
-							->order(['LessonChats.Created' => 'DESC'])->toArray());
+					->find('all')->contain('Users')->select(['Id' => 'LessonChats.Id',  'UserId' => 'Users.Id', 'Name' => 'Name','LastName' => 'LastName',
+					'Image' => 'Image', 'Created' => 'LessonChats.Created', 'Description' => 'LessonChats.Description'])					
+					->where(['LessonChats.Created >' => $date ])->where(['LessonId' => $lessonId ])
+					->andWhere(['OR' => [['Users.TeacherId' => $teacherId ], ['Users.Id' => $teacherId ]]])
+					->order(['LessonChats.Created' => 'DESC'])->toArray());
 		$this->set('_serialize', ["LessonChats"]);
     }
 
@@ -1020,6 +1021,74 @@ class ApiController extends AppController {
 		//$this->viewBuilder()->setOption('serialize', ["response"]);		
 		$this->set('_serialize', ["response"]);
 	}
+
+	/**
+	* Purpose: Registrar un usuario - tareas
+	*
+	* Request method: POST.
+	*
+	* Use example:
+	* https://miedd.samnaz.org/setuserlessontasks.json
+	*
+	* Result example:
+	{
+		"response": {
+			"userCoinId": 4
+		}
+	}
+	*
+	* @return 1| userCoinId
+	*/
+	public function setuserlessontasks() {
+		$this->request->allowMethod(['post']);
+		$userLessonTaskId=0;
+		
+		// Usr. Id 
+		$userId = $this->request->getData('UserId');
+		
+		// Table
+		$connection = ConnectionManager::get('default');					
+		$usersTable = TableRegistry::get('UserLessonTasks');
+				
+		// New rec.
+		$userRec = $usersTable->newEntity();
+		$userRec->UserId = $userId;			
+		$userRec->Created = date('Y-m-d H:i:s');		
+		$userRec->Description = $this->request->getData('Description');
+		$userRec->TaskId = $this->request->getData('TaskId');
+		$pl = $connection->execute("delete from UserLessonTasks where Id=$userId and TaskId =" . $this->request->getData('TaskId'));
+			
+		// Se guarda el reg.
+		if ($usersTable->save($userRec)) {
+			// Obtener el Id del registro
+			$userLessonTaskId = $userRec->Id;
+		} else {
+			throw new Exception('Error al guardar');
+		}
+
+		// Resp.
+		$response = array("userLessonTaskId" => $userLessonTaskId);
+		$this->set(compact('response'));
+		$this->set('_serialize', ["response"]);
+	}
+
+	/*
+	  * @param Integer $lessonId El id de lección
+	  *
+	  * @return 2|Id, Description
+	  */
+	  public function lessonchatusers($lessonId = NULL, $teacherId=NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('LessonChats');
+		$this->set('LessonChats', $this->LessonChats
+							->find('all')->contain('Users')->select(['Name' => 'Name','LastName' => 'LastName','Image' => 'Image'])					
+							->distinct(['Name', 'LastName', 'Image'])->where(['LessonId' => $lessonId ])
+							->andWhere(['OR' => [['Users.TeacherId' => $teacherId ], ['Users.Id' => $teacherId ]]])
+							->order(['LessonChats.Created' => 'DESC'])->toArray());
+		$this->set('_serialize', ["LessonChats"]);
+    }
 	
 }
 
