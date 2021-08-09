@@ -110,7 +110,7 @@
         </div>
 
     </div>
-
+                    <div style="position:absolute;margin:auto;left:0;right:0;button:15px;"><a href="https://miedd.samnaz.org/clic/pages/privacity" target="_blank" rel="noopener noreferrer">Política de privacidad</a></div>
     <script type="text/javascript">
 
         function InvalidMsg(textbox) {
