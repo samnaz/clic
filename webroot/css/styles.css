@@ -22,6 +22,67 @@ body{
 	overflow: hidden;
 	height: 100vh;
 }
+.bgHome .biblia {
+    width: 200px;
+}
+.bgHome .flecha {
+    width: 60px;
+    position: absolute;
+    bottom: 19px;
+    left: 108px;
+}
+.bgHome .mouse {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 250px;
+}
+    .bgHome{
+        background: url('img/fondoLogin.png') no-repeat;
+    background-position: top center;
+    background-size: cover;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+    }
+    .telefonos{
+        position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: auto;
+    width: 1000px;
+    } 
+    .tel-vertical{
+        display: block;
+    margin: auto;
+    width: 400px;
+    }
+    .boxBlue{
+        background: #3880ff;
+    padding: 50px 50px;
+    border-radius: 10px;
+    color: white;
+    font-size: 18px;
+    box-shadow: 0px 7px 13px -7px #030303;
+    }
+    .bgfooter{
+        background: url('img/fondoFooter.png') no-repeat;
+    background-position: top center;
+    background-size: cover;
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+    }
+    body{
+        overflow-x: hidden !important;
+    }
+    .tel-footer{
+        display: block;
+    margin: auto;
+    width: 900px;
+    }
 .ui-widget-header {
     border: 1px solid #aaa !important;
 	background: linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(56,128,255,1) 20%, rgba(56,128,255,1) 80%, rgba(0,212,255,1) 100%)!important;

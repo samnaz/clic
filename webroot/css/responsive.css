@@ -11,5 +11,14 @@
     }
     .flecha{
         display: none;
-    }
+    } 
+        .telefonos{ 
+        width: 100%;
+        } 
+        .tel-vertical{ 
+        width: 100%;
+        } 
+        .tel-footer{ 
+        width: 100%;
+        }
 }
