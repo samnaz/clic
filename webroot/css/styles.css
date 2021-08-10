@@ -24,7 +24,7 @@ body{
 }
 .bgHome .biblia {
     width: 200px;
-}
+} 
 .bgHome .flecha {
     width: 60px;
     position: absolute;
@@ -83,6 +83,24 @@ body{
     margin: auto;
     width: 900px;
     }
+	div.scrollmenu {
+		background-color: #333;
+		overflow: auto;
+		white-space: nowrap;
+		padding: 0 80px;
+	  }
+	  
+	  div.scrollmenu a {
+		display: inline-block;
+		color: white;
+		text-align: center;
+		padding: 14px;
+		text-decoration: none;
+	  }
+	  
+	  div.scrollmenu a:hover {
+		background-color: #777;
+	  }
 .ui-widget-header {
     border: 1px solid #aaa !important;
 	background: linear-gradient(90deg, rgba(0,212,255,1) 0%, rgba(56,128,255,1) 20%, rgba(56,128,255,1) 80%, rgba(0,212,255,1) 100%)!important;
