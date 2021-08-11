@@ -57,6 +57,11 @@
 	        $this->hasMany('UserLogs', [
 	        	'foreignKey' => 'UserId',
         	]);
+
+			//Relacion 1:n con la tabla UserLessonTasks
+	        $this->hasMany('UserLessonTasks', [
+	        	'foreignKey' => 'UserId',
+        	]);
 	    }
 
 	    public function validationDefault(Validator $validator)
