@@ -37,8 +37,7 @@ $cakeDescription = 'Clic';
     <title>
         <?= $cakeDescription ?>
     </title>
-    <link rel="icon" type="image/png" href="/clic/img/icon.png">
-    <?= $this->Html->meta('icon') ?>
+    <link rel="icon" type="image/png" href="/clic/img/icon.png"> 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('home.css') ?> 
     <?= $this->Html->css('styles.css') ?>
@@ -54,6 +53,7 @@ $cakeDescription = 'Clic';
     <div class="scrollmenu">
         <a href="https://miedd.samnaz.org/clic/pages/home">Home</a>
         <a href="https://miedd.samnaz.org/clic/login">Login</a> 
+        <a href="https://miedd.samnaz.org/clic/pages/privacity">Política de privacidad</a> 
     </div>
         <div class="row">        
             <div class="col-sm-12 col-md-12 col-xs-12 text-center " style="padding-top:40px">
@@ -64,13 +64,13 @@ $cakeDescription = 'Clic';
             </div>        
         </div>
         <img class="mouse animated fadeInRight " src="/clic/img/mouse.png" alt="mouse"> 
-        <img class="telefonos animated fadeInUp " src="/clic/img/telefonos.png" alt="mouse">
+        <img class="telefonos animated fadeInUp " src="/clic/img/telefonos.png" alt="telefonos">
         
     </div>
         <div class="row">
             <div class="seccion1">
                 <div class="col-md-6">
-                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical.png" alt="mouse">
+                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical.png" alt="telefono vertical">
                 </div>
                 <div class="col-md-6 boxBlue">
                     <h3>52 lecciones para adolescentes y jóvenes</h3>
@@ -89,7 +89,7 @@ $cakeDescription = 'Clic';
                     <p>Clic - Libro 1 contiene el material completo para un año calendario con 52 lecciones agrupadas en seis unidades de temáticas actuales y un enfoque práctico. Vea aquí los temas de cada lección. <a href="https://drive.google.com/file/d/1TVJEWp6mJ_0DAx72aAtE6dzP7yMxa-Ww/view" target="_blank" style="color:white;" rel="noopener noreferrer">Ver</a></p>
                 </div>
                 <div class="col-md-6">
-                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical-2.png" alt="mouse">
+                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical-2.png" alt="telefono vertical 2">
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@ $cakeDescription = 'Clic';
                 <div class="col-md-3">&nbsp;</div>
             </div>
             <div class="row">
-                <img class="tel-footer animated fadeInUp " src="/clic/img/telefonos-footer.png" alt="mouse">
+                <img class="tel-footer animated fadeInUp " src="/clic/img/telefonos-footer.png" alt="telefonos footer">
             </div>
         </div>
 </body>

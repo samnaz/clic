@@ -38,8 +38,7 @@ $cakeDescription = 'Clic: política de privacidad';
         <?= $cakeDescription ?>
     </title>
     <link rel="icon" type="image/png" href="/clic/img/icon.png">
-
-    <?= $this->Html->meta('icon') ?>
+ 
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('home.css') ?>
     <?= $this->Html->css('styles.css') ?>
@@ -54,6 +53,7 @@ $cakeDescription = 'Clic: política de privacidad';
 <div class="scrollmenu">
   <a href="https://miedd.samnaz.org/clic/pages/home">Home</a>
   <a href="https://miedd.samnaz.org/clic/login">Login</a> 
+   <a href="https://miedd.samnaz.org/clic/pages/privacity">Política de privacidad</a> 
 </div>
 <div class="row">
     <div class="col-md-12">
