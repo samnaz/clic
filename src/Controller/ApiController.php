@@ -28,7 +28,8 @@ class ApiController extends AppController {
         $this->Auth->allow(['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
 						  'register', 'forgotuser', 'logoutuser', 'getparameter', 'login', 'getuser',
 						  'updateuser', 'changepassword', 'books','lessons', 'setuserlesson', 'userlessons', 'setusercoins'
-						, 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat', 'setuserlessontasks', 'lessonchatusers']);
+						, 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat', 'setuserlessontasks', 
+						'lessonchatusers', 'userlessontasks']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
 		//this->getEventManager()->off($this->Csrf);
@@ -1090,6 +1091,25 @@ class ApiController extends AppController {
 							->andWhere(['OR' => [['Users.TeacherId' => $teacherId ], ['Users.Id' => $teacherId ]]])
 							->order(['LessonChats.Created' => 'DESC'])->toArray());
 		$this->set('_serialize', ["LessonChats"]);
+    }
+
+	/*
+	  * @param Integer $lessonId El id de lección
+	  * @param Integer $userId El id de user
+	  *
+	  * @return 2|D, Created
+	  */
+	  public function userlessontasks($lessonId = NULL, $userId = NULL) {
+		$this->request->allowMethod(['get']);
+		
+		// Importar el modelo
+		$this->loadModel('UserLessonTasks');
+		$this->set('userLessonsTasks', $this->UserLessonTasks
+							->find('all')							
+							->contain('LessonTasks')
+							->where(['LessonId' => $lessonId ])->where(['UserLessonTasks.UserId' => $userId ])
+							->order(['TaskId' => 'ASC'])->toArray());
+		$this->set('_serialize', ["userLessonsTasks"]);
     }
 	
 }
