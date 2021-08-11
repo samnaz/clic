@@ -27,7 +27,7 @@ if (!Configure::read('debug')) :
     );
 endif;
 
-$cakeDescription = 'Políticas de Privacidad';
+$cakeDescription = 'Clic';
 ?>
 <!DOCTYPE html>
 <html>
@@ -37,12 +37,17 @@ $cakeDescription = 'Políticas de Privacidad';
     <title>
         <?= $cakeDescription ?>
     </title>
-
+    <link rel="icon" type="image/png" href="/clic/img/icon.png">
     <?= $this->Html->meta('icon') ?>
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('home.css') ?> 
     <?= $this->Html->css('styles.css') ?>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
+    <style>
+        #toolbar{
+            display:none !important;
+        }
+    </style>
 </head>
 <body>
     <div class="bgHome">
@@ -53,19 +58,19 @@ $cakeDescription = 'Políticas de Privacidad';
         <div class="row">        
             <div class="col-sm-12 col-md-12 col-xs-12 text-center " style="padding-top:40px">
                 <div class="boxBF">
-                    <img class="biblia animated fadeInLeft" src="img/biblia.png" alt="biblia">
-                    <img class="flecha animated fadeInRight delay-1s" src="img/flecha.png" alt="flecha">
+                    <img class="biblia animated fadeInLeft" src="/clic/img/biblia.png" alt="biblia">
+                    <img class="flecha animated fadeInRight delay-1s" src="/clic/img/flecha.png" alt="flecha">
                 </div> 
             </div>        
         </div>
-        <img class="mouse animated fadeInRight " src="img/mouse.png" alt="mouse"> 
-        <img class="telefonos animated fadeInUp " src="img/telefonos.png" alt="mouse">
+        <img class="mouse animated fadeInRight " src="/clic/img/mouse.png" alt="mouse"> 
+        <img class="telefonos animated fadeInUp " src="/clic/img/telefonos.png" alt="mouse">
         
     </div>
         <div class="row">
             <div class="seccion1">
                 <div class="col-md-6">
-                    <img class="tel-vertical animated fadeInUp " src="img/tel-vertical.png" alt="mouse">
+                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical.png" alt="mouse">
                 </div>
                 <div class="col-md-6 boxBlue">
                     <h3>52 lecciones para adolescentes y jóvenes</h3>
@@ -84,7 +89,7 @@ $cakeDescription = 'Políticas de Privacidad';
                     <p>Clic - Libro 1 contiene el material completo para un año calendario con 52 lecciones agrupadas en seis unidades de temáticas actuales y un enfoque práctico. Vea aquí los temas de cada lección. <a href="https://drive.google.com/file/d/1TVJEWp6mJ_0DAx72aAtE6dzP7yMxa-Ww/view" target="_blank" style="color:white;" rel="noopener noreferrer">Ver</a></p>
                 </div>
                 <div class="col-md-6">
-                    <img class="tel-vertical animated fadeInUp " src="img/tel-vertical-2.png" alt="mouse">
+                    <img class="tel-vertical animated fadeInUp " src="/clic/img/tel-vertical-2.png" alt="mouse">
                 </div>
             </div>
         </div>
@@ -99,7 +104,7 @@ $cakeDescription = 'Políticas de Privacidad';
                 <div class="col-md-3">&nbsp;</div>
             </div>
             <div class="row">
-                <img class="tel-footer animated fadeInUp " src="img/telefonos-footer.png" alt="mouse">
+                <img class="tel-footer animated fadeInUp " src="/clic/img/telefonos-footer.png" alt="mouse">
             </div>
         </div>
 </body>
