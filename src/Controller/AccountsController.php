@@ -384,6 +384,7 @@ class AccountsController extends AppController {
                 $userLogin->UserStatusId = $this->request->getData('rbAccountStatus');
                 $userLogin->AccessId = 1;
                 $userLogin->Modified = date('Y-m-d H:i:s');
+                $this->Flash->success('Información del Login actualizada.');
 
             } else {
                 //Recibimos los datos
@@ -396,12 +397,12 @@ class AccountsController extends AppController {
                 $userLogin->UserStatusId = $this->request->getData('rbAccountStatus');
                 $userLogin->AccessId = 1;
                 $userLogin->Modified = date('Y-m-d H:i:s');
-
+                $this->Flash->success('Información del Login/password actualizada.');
             }
 
             //Guardamos los datos de Logueo del Usuario
             if($userLoginTable->save($userLogin)){
-                $this->Flash->success('Información del Login actualizada.');
+                
                 return $this->redirect($this->referer());
                 //return $this->redirect(['action' => 'myaccount']);
             }

@@ -306,8 +306,6 @@
                                                     echo $this->Form->select('rbRolls', $roles, [
                                                         'id' => 'rbRolls',
                                                         'label' => FALSE,
-                                                        'type' => 'radio',
-                                                        'multiple' => 'radio',
                                                         'value' => $userRoles['RolId'],
                                                         'name' => 'rbRolls',
                                                         'onclick' => 'LoadActionbyRol(this.value)',
@@ -336,6 +334,10 @@
 							<hr>
 							<!-- Boton de Update -->
 							<div class="row">
+                            <div class="col-sm-12">
+										<div class="alert alert-danger" id="alertForm3" style="display:none;"></div>
+									</div>
+									
 								<div class="col-sm-12 text-right">
 									<?php
 										echo $this->Form->button('Actualizar', ['type' => 'submit', 'class' => 'btn btn-submit', 'onclick' => 'validateRolesForm()']);
@@ -348,8 +350,8 @@
 				<script type="text/javascript">
                     function validateRolesForm() {
 
-                        var alertForm = $("#alertForm2");
-                        if(!$('input:radio[name=rbRolls]:checked').val()){
+                        var alertForm = $("#alertForm3");
+                        if(!$('#rbRolls').val()=='0'){
                             alertForm.show(500);
                             alertForm.text("Debe elegir un rol.");
                             return false;

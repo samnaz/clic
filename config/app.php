@@ -270,9 +270,9 @@ return [
             /*
              * It is recommended to set these options through your environment or app_local.php
              */
-            'username' => 'i6662960_cphp1',
-            'password' => 'L.X51phPGlDIvHqCzC789',
-            'database' => 'i6662960_cphp1',
+            'username' => 'c1click',
+            'password' => 'M!taHEFse8qrN',
+            'database' => 'c1click',
             /*
              * You do not need to set this flag to use full utf-8 encoding (internal default since CakePHP 3.6).
              */
