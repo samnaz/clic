@@ -56,6 +56,54 @@ class ReportsController extends AppController {
 			);
     }
 	
+	// Report
+    public function usercoins() {
+        $userId = $this->Auth->user('Id');
+
+        $pageTitle = "Uso de Monedas";
+
+        $breadcrumbs = '<li>Reportes</li>
+                        <li>Lecciones</li>
+                        <li class="active">Uso de Monedas</li>';
+
+		$this->set('pageTitle', $pageTitle);
+		$this->set('_serialize', ['pageTitle']);
+		$this->set('breadcrumbs', $breadcrumbs);
+		$this->set('_serialize', ['breadcrumbs']);
+		$this->set('userId', $userId);
+		$this->set('_serialize', ['userId']); 
+		
+		// Rol
+		$this->loadModel('UserRols');
+	    $rols = $this->UserRols
+			->find('all')
+			->where(['UserRols.UserId' => $userId])
+			->first();
+		
+		//Se importa el modelo roles, estos se van a mostrar en la vista con un checkbox
+        $this->loadModel('UserLessons');
+		
+		// Pastor
+		if ($rols['RolId']==3)
+			$this->set('users', $this->UserLessons
+				->find('list')->contain('Users')->where(['Users.UserId' => $userId])
+				->select(['Name' => 'concat(UserId,\'-\', Users.Name,\' \', Users.LastName)', 'Id' => 'UserId'])->distinct(['Name', 'Id'])
+				->order(['Users.Name' => 'ASC'])
+			);
+		else if ($rols['RolId']==2)// Triaris
+			$this->set('users', $this->UserLessons
+				->find('list')->contain('Users')->where(['Users.TeacherId' => $userId])
+				->select(['Name' => 'concat(UserId,\'-\', Users.Name,\' \', Users.LastName)', 'Id' => 'UserId'])->distinct(['Name', 'Id'])
+				->order(['Users.Name' => 'ASC'])
+			);
+		else
+			$this->set('users', $this->UserLessons
+				->find('list')->contain('Users')
+				->select(['Name' => 'concat(UserId,\'-\', Users.Name,\' \', Users.LastName)', 'Id' => 'UserId'])->distinct(['Name', 'Id'])
+				->order(['Users.Name' => 'ASC'])
+			);
+    }
+	
 	// funcion para ver progreso
     public function getuserlessons($userId=NULL) {
 
@@ -110,16 +158,26 @@ class ReportsController extends AppController {
         $this->set('serialize', ['userpages']);
     }
 	
-	// funcion para ver progreso-pag.
-    public function getuserpage($userId=NULL, $pageId = NULL) {
+	// funcion para ver monedas gastadas
+    public function getusercoins($userId=NULL) {
 
         $this->loadModel('UserPages');
-		$userpage= $this->UserPages
-                        ->find('all')->contain('Pages.PageTypes')->select(['Name' => 'PageTypes.Name', 'Id' => 'PageTypes.Id', 'File' => 'UserPages.File', 'Response' => 'UserPages.Response'])
-                        ->where(['UserPages.Id' => $pageId, 'UserPages.UserId' => $userId])->first();
+		$connection = ConnectionManager::get('default');
+		$s = "SELECT U.Id AS UserId,
+				  U.Name AS `Name`,U.LastName, UL.`Coins`, `Category`,
+				  CONVERT_TZ(UL.Created,'+00:00','-04:00') as Created
+				  FROM `UserCoins` UL
+				  INNER JOIN Users U                                      
+				  ON U.Id = UL.UserId
+				  where UL.UserId = $userId
+				ORDER BY
+				  UL.Created desc";
 
-        $this->set('userpage', $userpage);
-        $this->set('serialize', ['userpage']);
+		//echo $s;
+        $rpt = $connection->execute($s)
+                        ->fetchAll('assoc');
+        $this->set('rpt', $rpt);
+        $this->set('serialize', ['rpt']);
     }
 	
 	// Funcion para editar
@@ -130,8 +188,8 @@ class ReportsController extends AppController {
 			$this->loadModel('UserLessonTasks');
             $bTable = TableRegistry::get('UserLessonTasks');
             $brnd = $this->UserLessonTasks->get($pId);
-			$oldPoints = $brnd->TeacherPoints;
-            $brnd->TeacherPoints = $this->request->getData('TeacherPoints');
+			$brnd->TeacherPoints = $this->request->getData('TeacherPoints');
+			$brnd->TeacherComments = $this->request->getData('TeacherComments');
 			$brnd->TeacherReview = date('Y-m-d H:i:s');
 
             // Guardamos el registro

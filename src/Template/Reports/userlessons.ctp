@@ -145,6 +145,8 @@
 			// Validate 
 			var v = parseInt(row.TeacherPoints);
 			var p = parseInt(row.Points);
+            var co = row.TeacherComments;
+
 			//console.log(v);
 			if (isNaN(v)){
 				alert("Calificación inválida");
@@ -157,7 +159,7 @@
 				e.cancelBubble = true;
 			}else{
 				$.ajax({
-					data: {Id : row.Id,TeacherPoints: v},
+					data: {Id : row.Id,TeacherPoints: v, TeacherComments:co},
 					type: 'POST',
 					async: false,
 					url: 'AddTeacherPoints.json',
@@ -194,6 +196,7 @@
 							<th data-field="Points" data-align="center" data-halign="left" data-sortable="true">Puntos</th>
 							<th data-field="TeacherReview" data-align="center" data-halign="left" data-sortable="true">Fecha Revisada</th>
 							<th data-editable="true" data-field="TeacherPoints" data-align="right" data-halign="Center" data-sortable="true">Calificación</th>							
+							<th data-editable="true" data-field="TeacherComments" data-align="right" data-halign="Center" data-sortable="true">Comentarios</th>							
 					</thead>
 				</table>
             </div>
