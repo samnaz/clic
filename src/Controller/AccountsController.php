@@ -199,7 +199,22 @@ class AccountsController extends AppController {
 
     //funcion para ver lista de usuarios
     public function getusers() {
+        $userId = $this->Auth->user('Id');
 
+        // Rol
+		$this->loadModel('UserRols');
+	    $rols = $this->UserRols
+			->find('all')
+			->where(['UserRols.UserId' => $userId])
+			->first();
+		
+		// User
+		if ($rols['RolId']==3)
+			$var = "and Users.UserId = $userId";
+		else if ($rols['RolId']==2)// Estudiante
+            $var = "and Users.TeacherId = $userId";
+		else
+            $var='';
         $this->loadModel('Users');
 
         $connection = ConnectionManager::get('default');
@@ -215,7 +230,7 @@ class AccountsController extends AppController {
                                           Users Users                                          
                                           INNER JOIN UserRols UserRols ON Users.Id = UserRols.UserId
                                           INNER JOIN Roles Roles ON Roles.Id = UserRols.RolId       
-										  inner join UserStatus S on S.Id = Users.UserStatusId
+										  inner join UserStatus S on S.Id = Users.UserStatusId $var
                                         ORDER BY
                                           Users.Name Asc")
                         ->fetchAll('assoc');

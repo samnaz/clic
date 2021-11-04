@@ -351,7 +351,7 @@
                     function validateRolesForm() {
 
                         var alertForm = $("#alertForm3");
-                        if(!$('#rbRolls').val()=='0'){
+                        if($('#rbRolls').val()=='0'){
                             alertForm.show(500);
                             alertForm.text("Debe elegir un rol.");
                             return false;
@@ -413,6 +413,8 @@
                 var option = 0;
 
                 for(var i = 0; i < actions.length; i++){
+                    $("#" + $("#rbAction" + actions[i].Id + "-2[name=rbAction" + actions[i].Id + "]")[0].id).prop('checked', true);
+                            
                     for(var j = 0; j < actionsByRol.length; j++){
                         if(actionsByRol[j].Id == actions[i].Id){
                             $("#" + $("#rbAction" + actions[i].Id + "-1[name=rbAction" + actions[i].Id + "]")[0].id).prop('checked', true);
@@ -421,11 +423,12 @@
 
                             actionsChecked.push(actions[i].Id);
                         }
-                        else {
+                        /*else {
+console.log((option+ "!="+ actions[i].Id));
                             if (option != actions[i].Id){
-                                $("#" + $("#rbAction" + actions[i].Id + "-2[name=rbAction" + actions[i].Id + "]")[0].id).prop('checked', true);;
+                                $("#" + $("#rbAction" + actions[i].Id + "-2[name=rbAction" + actions[i].Id + "]")[0].id).prop('checked', true);
                             }
-                        }
+                        }*/
                         option = actions[i].Id;
                     }
                 }
