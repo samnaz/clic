@@ -1059,7 +1059,7 @@ class ApiController extends AppController {
 		$userRec->Created = date('Y-m-d H:i:s');		
 		$userRec->Description = $this->request->getData('Description');
 		$userRec->TaskId = $this->request->getData('TaskId');
-		$pl = $connection->execute("delete from UserLessonTasks where Id=$userId and TaskId =" . $this->request->getData('TaskId'));
+		$pl = $connection->execute("delete from UserLessonTasks where UserId=$userId and TaskId =" . $this->request->getData('TaskId'));
 			
 		// Se guarda el reg.
 		if ($usersTable->save($userRec)) {
