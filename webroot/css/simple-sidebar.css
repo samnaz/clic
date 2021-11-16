@@ -136,13 +136,13 @@
         font-size: 16px;
     }
     .web-header h1{
-        margin-top: -26px;
+        margin-top: -15px;
     }
     .top-icon{
         display: none !important;
-    }
-    .user-login, .user-login a{
-        color: #000;
+    } 
+    .web-header { 
+        background-size: inherit; 
     }
     .user-login{
         margin-top: -17px;
