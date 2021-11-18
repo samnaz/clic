@@ -142,10 +142,10 @@
         display: none !important;
     } 
     .web-header { 
-        background-size: inherit; 
+        background-size: inherit !important; 
     }
     .user-login{
-        margin-top: -17px;
+        margin-top: -17px !important;
     }  
     #wrapper.toggled #page-content-wrapper {
         position: relative;
