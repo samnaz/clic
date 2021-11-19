@@ -702,6 +702,7 @@ class ApiController extends AppController {
 									, 'TeacherName' => "(Select concat(Name, ' ', LastName) from Users U where U.Id = Users.TeacherId)"
 									, 'CountryId' => 'Users.CountryId'
 									, 'CountryName' => "(Select concat(Name) from Countries U where U.Id = Users.CountryId)"
+									, 'UserRols' => "(Select RolId from UserRols U where U.UserId = Users.Id)"									
 									, 'Coins' => 'Users.Coins'
 									, 'Gender' => 'Users.Gender'
 									, 'Image' => 'Users.Image'
