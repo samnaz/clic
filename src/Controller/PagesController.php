@@ -14,11 +14,13 @@
  */
 namespace App\Controller;
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
-use Cake\Http\Exception\ForbiddenException;
+use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
+use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
-use Cake\View\Exception\MissingTemplateException;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 
 /**
  * Static content controller
@@ -32,14 +34,16 @@ class PagesController extends AppController
     /**
      * Displays a view
      *
-     * @param array ...$path Path segments.
+     * @param string ...$path Path segments.
      * @return \Cake\Http\Response|null
      * @throws \Cake\Http\Exception\ForbiddenException When a directory traversal attempt.
+     * @throws \Cake\View\Exception\MissingTemplateException When the view file could not
+     *   be found and in debug mode.
      * @throws \Cake\Http\Exception\NotFoundException When the view file could not
-     *   be found
+     *   be found and not in debug mode.
      * @throws \Cake\View\Exception\MissingTemplateException In debug mode.
      */
-    public function display(...$path)
+    public function display(string ...$path): ?Response
     {
         if (!$path) {
             return $this->redirect('/');
@@ -58,7 +62,7 @@ class PagesController extends AppController
         $this->set(compact('page', 'subpage'));
 
         try {
-            $this->render(implode('/', $path));
+            return $this->render(implode('/', $path));
         } catch (MissingTemplateException $exception) {
             if (Configure::read('debug')) {
                 throw $exception;
@@ -67,8 +71,8 @@ class PagesController extends AppController
         }
     }
 
-    public function beforeFilter(Event $event) {
-		parent::beforeFilter($event);
+    public function beforeFilter(EventInterface $event) {
         $this->Auth->allow();
+		parent::beforeFilter($event);
     }
 }

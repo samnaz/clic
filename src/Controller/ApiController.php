@@ -43,7 +43,7 @@ class ApiController extends AppController {
   * Request method: GET.
   *
   * Use example:
-  * http://miedd.samnaz.org/clic/Api/liststates/58.json
+  * http://miedd.samnaz.org/Api/liststates/58.json
   *
   * Result example:
   * {
@@ -90,7 +90,7 @@ class ApiController extends AppController {
 	* Request Mehod: GET
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/countries.json
+	* http://miedd.samnaz.org/Api/countries.json
 	*
 	* Result example:
 	*	{
@@ -117,7 +117,7 @@ class ApiController extends AppController {
 	* Request Mehod: GET
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/books.json
+	* http://miedd.samnaz.org/Api/books.json
 	*
 	* Result example:
 	{
@@ -221,7 +221,7 @@ class ApiController extends AppController {
 	* Request Mehod: GET
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/teachers.json
+	* http://miedd.samnaz.org/Api/teachers.json
 	*
 	* Result example:
 	*{
@@ -276,7 +276,7 @@ class ApiController extends AppController {
 	* Request Mehod: POST
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/contact.json
+	* http://miedd.samnaz.org/Api/contact.json
 	*
 	* Result example:
 	*	{
@@ -328,7 +328,7 @@ class ApiController extends AppController {
 	* Request Mehod: POST
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/forgotuser.json
+	* http://miedd.samnaz.org/Api/forgotuser.json
 	*
 	* Result example:
 	* {
@@ -382,7 +382,7 @@ class ApiController extends AppController {
 					$userTable->save($Id);
 
 					// Salvar en db
-					$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/clic/img/logo.png' alt='Clic'/></div><p>Estimad@: <b>". $queryUser['Name'] ."</b>";
+					$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/img/logo.png' alt='Clic'/></div><p>Estimad@: <b>". $queryUser['Name'] ."</b>";
 					$message .= "</p><p>Usted ha solicitado que le sea enviada su contraseña al <b>Email</b>: " . $this->request->getData("Email");
 					$message .= "<br>Su contraseña es: <b>" . $newPass ."</b></p><p>Si usted no hizo esta solicitud contáctenos inmediatamente.</p>";
 
@@ -409,7 +409,7 @@ class ApiController extends AppController {
   * Request method: GET.
   *
   * Use example:
-  * http://miedd.samnaz.org/clic/Api/getparameter/Email_Contacto.json
+  * http://miedd.samnaz.org/Api/getparameter/Email_Contacto.json
   *
   * Result example:
   *{
@@ -453,7 +453,7 @@ class ApiController extends AppController {
 	* Request Mehod: POST
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/login.json
+	* http://miedd.samnaz.org/Api/login.json
 	*
 	* Result example:
 	* {
@@ -519,7 +519,7 @@ class ApiController extends AppController {
 	* Request method: POST.
 	*
 	* Use example:
-	* http://miedd.samnaz.org/clic/Api/register.json
+	* http://miedd.samnaz.org/Api/register.json
 	*
 	* Result example:
 	* {"response": { "UserId": 438,"Name": "Tst", "LastName": "rr"}}
@@ -586,7 +586,7 @@ class ApiController extends AppController {
 						if ($this->request->getData("AuthenticationMethodId") =='3'){
 							$varURL = $this->url;
 							$link = "<a href='".$varURL."confirm?code=".$userdocid."&id=".$this->request->getData("Email")."&sec=".strlen($name)."&seed=".date('YmdHis')."&t=".$userId."&x=".($userId*10)."'>aquí</a>";
-							$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/clic/img/logo.png' alt='Clic'/></div>Estimad@: <b>". $name . " ". $lastName."</b>";
+							$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/img/logo.png' alt='Clic'/></div>Estimad@: <b>". $name . " ". $lastName."</b>";
 							$message .= "<p>Usted se ha registrado en Clic con el <b>Email</b>: " . $this->request->getData("Email");
 							$message .= "<br>Para confirmar su registro haga click <b>" . $link ."</b></p><p>Si usted no hizo este registro contáctenos inmediatamente.</p>";
 
@@ -661,7 +661,7 @@ class ApiController extends AppController {
   * Request method: get.
   *
   * Use example:
-  * "http://miedd.samnaz.org/clic/Api/getuser/506.json",
+  * "http://miedd.samnaz.org/Api/getuser/506.json",
   *
   * Result example:
   * {
@@ -719,7 +719,7 @@ class ApiController extends AppController {
 	* Request method: POST.
 	*
 	* Use example:
-	* http://miedd.samnaz.org/clic/Api/updateuser.json
+	* http://miedd.samnaz.org/Api/updateuser.json
 	*
 	* Result example:
 	* {"response": { "UserId": 1}}
@@ -761,7 +761,7 @@ class ApiController extends AppController {
 	* Request Mehod: POST
 	*
 	* Use example
-	* http://miedd.samnaz.org/clic/Api/changepassword.json
+	* http://miedd.samnaz.org/Api/changepassword.json
 	*
 	* Result example:
 	* {

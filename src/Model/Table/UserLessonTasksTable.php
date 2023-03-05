@@ -8,7 +8,7 @@ use Cake\Validation\Validator;
 
 class UserLessonTasksTable extends Table
 {
-	public function initialize(array $config):void
+	public function initialize(array $config):void:void
 	{
 		parent::initialize($config);
 

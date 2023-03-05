@@ -390,7 +390,7 @@ class TablesController extends AppController {
 					//do the actual uploading of the file. First arg is the tmp name, second arg is 
 					//where we are putting it
 					move_uploaded_file($file['tmp_name'], WWW_ROOT . '/img/Banners/' . $imageFileName);
-					$vt->Description = '<img title="'.$this->request->getData('txtTitle').'" src="http://mieddsam.com/clic/img/Banners/' . $imageFileName.'">';
+					$vt->Description = '<img title="'.$this->request->getData('txtTitle').'" src="http://mieddsam.com/img/Banners/' . $imageFileName.'">';
 				}
 				else
 					 $this->Flash->error(__('Imagen inválida.'),['clear'=> true]);

@@ -8,7 +8,7 @@ use Cake\Validation\Validator;
 
 class LessonChatsTable extends Table
 {
-	public function initialize(array $config):void
+	public function initialize(array $config):void:void
 	{
 		parent::initialize($config);
 

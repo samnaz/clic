@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
  * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
@@ -15,39 +17,38 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
-use Cake\Event\Event;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
-
-
+use Cake\Event\EventInterface;
 /**
  * Application Controller
  *
  * Add your application-wide methods in the class below, your controllers
  * will inherit them.
  *
- * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
+ * @link https://book.cakephp.org/4/en/controllers.html#the-app-controller
  */
 class AppController extends Controller
 {
 	public $url;
+   
     /**
      * Initialization hook method.
      *
      * Use this method to add common initialization code like loading components.
      *
-     * e.g. `$this->loadComponent('Security');`
+     * e.g. `$this->loadComponent('FormProtection');`
      *
      * @return void
      */
-    public function initialize()
+    public function initialize(): void
     {
         parent::initialize();
-
+        date_default_timezone_set('America/Panama');
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
         $this->loadComponent('Flash');
-		$this->url = 'https://miedd.samnaz.org/clic/';
+		$this->url = 'https://miedd.samnaz.org/';
+        
         /*
          * Enable the following component for recommended CakePHP security settings.
          * see https://book.cakephp.org/3.0/en/controllers/components/security.html
@@ -78,7 +79,7 @@ class AppController extends Controller
 	        'logoutRedirect' => [
 	                'controller' => 'Login', 
 	                'action' => 'index'
-	        ]
+	        ], 'authError' => 'Usuario no autorizado',
 	        ]);
 			
 		// Pass settings in
@@ -88,21 +89,27 @@ class AppController extends Controller
 		]);
 		//$this->Auth->allow('login');
 		$this->Auth->allow(['all']);
+
+        /*
+         * Enable the following component for recommended CakePHP form protection settings.
+         * see https://book.cakephp.org/4/en/controllers/components/form-protection.html
+         */
+        //$this->loadComponent('FormProtection');
     }
-	
-	/**
+
+    /**
      * Before render callback.
      *
      * @param \Cake\Event\Event $event The beforeRender event.
      * @return \Cake\Network\Response|null|void
      */
-    public function beforeRender(Event $event)
+    public function beforeRender(EventInterface $event)
     {
-        if (!array_key_exists('_serialize', $this->viewVars) &&
+       /* if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->getType(), ['application/json', 'application/xml'])
         ) {
             $this->set('_serialize', true);
-        }
+        }*/
     }
 	
 	 public function isAuthorized() {
@@ -111,29 +118,11 @@ class AppController extends Controller
     }
 
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event) {
 		$this -> set('user', $this->Auth->user());
 		//$this->getEventManager()->makeMess($this->Csrf);
 		
 		//Configure::write('Config.timezone', 'America/Caracas');
 		parent::beforeFilter($event);
     }
-	
-	public function middleware($middlewareQueue) {
-		$options = [
-			
-		];
-		$csrf = new CsrfProtectionMiddleware($options);		
-		$middlewareQueue->add($csrf);
-		/*if(strpos($_SERVER['REQUEST_URI'], 'Api')===false){
-			$middlewareQueue->add($csrf);
-		}*/
-		
-		/*$csrf->whitelistCallback(function (ServerRequestInterface $request) {
-            $params = $request->getAttribute('params');
-            return $params['controller'] !== 'Api';
-        });*/
-		
-		return $middlewareQueue;
-	}
 }
