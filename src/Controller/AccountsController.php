@@ -125,7 +125,7 @@ class AccountsController extends AppController {
 
             $usersTable = TableRegistry::get('Users');
 
-            $user = $usersTable->newEntity();
+            $user = $usersTable->newEmptyEntity();
 
             $user->AuthenticationMethodId = $this->request->getData('rbAuthenticationMethod');
             $user->Username = $this->request->getData('txtEmail');
@@ -157,7 +157,7 @@ class AccountsController extends AppController {
 			   //Recibimos los datos de UsersRols
 			  $userRolTable = TableRegistry::get('UserRols');
 
-			  $userRols = $userRolTable->newEntity();
+			  $userRols = $userRolTable->newEmptyEntity();
 			  $userRols->UserId = $newUserId;
 			  $userRols->RolId = $this->request->getData('rbRolls');
 
@@ -475,7 +475,7 @@ class AccountsController extends AppController {
 			->execute();
 			
 			// Insertamos nuevo
-			$userRols = $userRolTable->newEntity();
+			$userRols = $userRolTable->newEmptyEntity();
 			$userRols->UserId = $userId;
 			$userRols->RolId = $this->request->getData('rbRolls');
 

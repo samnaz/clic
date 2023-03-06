@@ -289,7 +289,7 @@ class TablesController extends AppController {
             $ssTable = TableRegistry::get('States');
             $exists = $ssTable->exists(['name' => $this->request->getData('txtName')]);
 			if (!$exists){			
-				$ss = $ssTable->newEntity();
+				$ss = $ssTable->newEmptyEntity();
 				$ss->Name = $this->request->getData('txtName');
 				$ss->CountryId = $this->request->getData('cmbCountry');
 				$ss->Created = date('Y-m-d H:i:s');
@@ -337,7 +337,7 @@ class TablesController extends AppController {
             $ssTable = TableRegistry::get('Countries');
             $exists = $ssTable->exists(['name' => $this->request->getData('txtName')]);
 			if (!$exists){			
-				$ss = $ssTable->newEntity();
+				$ss = $ssTable->newEmptyEntity();
 				$ss->Name = $this->request->getData('txtName');
 				$ss->Id = $this->request->getData('txtCountryId');
 				$ss->Created = date('Y-m-d H:i:s');
@@ -373,7 +373,7 @@ class TablesController extends AppController {
         // Validamos que la peticion sea de tipo POST
         if($this->request->is('POST')){
             $vTable = TableRegistry::get('Banners');
-            $vt = $vTable->newEntity();
+            $vt = $vTable->newEmptyEntity();
 			$vt->Title = $this->request->getData('txtTitle');
 			
 			// Si es img.

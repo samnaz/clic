@@ -39,7 +39,7 @@ class LoginController extends AppController
 				else{
 					$this->Auth->setUser($user);
 					$usersTable = TableRegistry::get('UserLogs');
-					$user = $usersTable->newEntity();
+					$user = $usersTable->newEmptyEntity();
 					$user->UserId = $this->Auth->user('Id');
 					$user->Action = 'Login Admin';
 					$user->IpAddress = $this->request->clientIp();

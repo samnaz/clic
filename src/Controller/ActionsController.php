@@ -38,7 +38,7 @@ class ActionsController extends AppController {
 
             $roleTable = TableRegistry::get('Roles');
 
-            $role = $roleTable->newEntity();
+            $role = $roleTable->newEmptyEntity();
             $role->Name = $this->request->getParam['txtRoleName'];
 
             if ($roleTable->save($role)) {
@@ -105,7 +105,7 @@ class ActionsController extends AppController {
                 
                 if(!$exists){
                    
-                    $action = $actionsRolsTable->newEntity();
+                    $action = $actionsRolsTable->newEmptyEntity();
                     $action->RolId = $rolId;
                     $action->ActionId = $actions[$i];
 

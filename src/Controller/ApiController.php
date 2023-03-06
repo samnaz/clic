@@ -4,7 +4,7 @@ use App\Controller\AppController;
 use Cake\Cache\Cache;
 use Cake\Utility\Security;
 use Cake\ORM\TableRegistry;
-use Cake\Event\Event;
+use Cake\Event\EventInterface;
 use Cake\Controller\Component;
 use Cake\Controller\Component\AuthComponent;
 use Cake\Network\Email\Email;
@@ -17,14 +17,14 @@ header('Access-Control-Allow-Methods: GET, POST');
 header("Access-Control-Allow-Headers: X-Requested-With, Content-Type");
 class ApiController extends AppController {
 
-    public function initialize() {
+    public function initialize(): void {
 
         parent::initialize();
         $this->loadComponent('RequestHandler');
 		//$this->loadComponent('Security');
     }
 
-    public function beforeFilter(Event $event) {
+    public function beforeFilter(EventInterface $event){
         $this->Auth->allow(['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
 						  'register', 'forgotuser', 'logoutuser', 'getparameter', 'login', 'getuser',
 						  'updateuser', 'changepassword', 'books','lessons', 'setuserlesson', 'userlessons', 'setusercoins'
@@ -474,7 +474,7 @@ class ApiController extends AppController {
 			$this->loadModel('Users');
 
 			// Encriptar password
-			/*$usr = $this->Users->newEntity();
+			/*$usr = $this->Users->newEmptyEntity();
 			//
 			$usr->Password = (new DefaultPasswordHasher)->hash($this->request->getParam("Password"));
 			//$usr->Password=$this->request->getParam("Password")
@@ -491,7 +491,7 @@ class ApiController extends AppController {
             if ($user){
                 // Log
 				$usersTable = TableRegistry::get('UserLogs');
-				$userl = $usersTable->newEntity();
+				$userl = $usersTable->newEmptyEntity();
 				$userl->UserId = $user['Id'];
 				$userl->Action = 'Login';
 				$userl->IpAddress = $this->request->clientIp();
@@ -540,7 +540,7 @@ class ApiController extends AppController {
 
 				//Se registra el nuevo usuario
 				$userdocid = $this->request->getData("DocTypeId").$this->request->getData("DocId");
-				$userRec = $usersTable->newEntity();
+				$userRec = $usersTable->newEmptyEntity();
 				$userRec->Name = $name;
 				$userRec->LastName = $lastName;
 
@@ -576,7 +576,7 @@ class ApiController extends AppController {
 
 					// Rol - 3 cliente
 					$urolsTable = TableRegistry::get('UserRols');
-					$urolRec = $urolsTable->newEntity();
+					$urolRec = $urolsTable->newEmptyEntity();
 					$urolRec->RolId = 3;
 					$urolRec->UserId = $userId;
 
@@ -605,7 +605,7 @@ class ApiController extends AppController {
 						{
 							// Log
 							$usersTable = TableRegistry::get('UserLogs');
-							$user1 = $usersTable->newEntity();
+							$user1 = $usersTable->newEmptyEntity();
 							$user1->UserId = $userId;
 							$user1->Action = 'Login';
 							$user1->IpAddress = $this->request->clientIp();
@@ -635,7 +635,7 @@ class ApiController extends AppController {
 
 				// Log
 				$usersTable = TableRegistry::get('UserLogs');
-				$user1 = $usersTable->newEntity();
+				$user1 = $usersTable->newEmptyEntity();
 				$user1->UserId = $userId;
 				$user1->Action = 'Login';
 				$user1->IpAddress = $this->request->clientIp();
@@ -824,7 +824,7 @@ class ApiController extends AppController {
 		$pl = $connection->execute("delete from UserLessons where UserId=$userId and LessonId = " . $this->request->getData('LessonId'));
 				
 		// New rec.
-		$userRec = $usersTable->newEntity();
+		$userRec = $usersTable->newEmptyEntity();
 		$userRec->UserId = $userId;			
 		$userRec->Created = date('Y-m-d H:i:s');		
 		$userRec->LessonId = $this->request->getData('LessonId');
@@ -898,7 +898,7 @@ class ApiController extends AppController {
 		$usersTable = TableRegistry::get('UserCoins');
 				
 		// New rec.
-		$userRec = $usersTable->newEntity();
+		$userRec = $usersTable->newEmptyEntity();
 		$userRec->UserId = $userId;			
 		$userRec->Created = date('Y-m-d H:i:s');		
 		$userRec->Category = $this->request->getData('Category');
@@ -1004,7 +1004,7 @@ class ApiController extends AppController {
 		$usersTable = TableRegistry::get('LessonChats');
 				
 		// New rec.
-		$userRec = $usersTable->newEntity();
+		$userRec = $usersTable->newEmptyEntity();
 		$userRec->UserId = $userId;
 		$userRec->Created = date('Y-m-d H:i:s');
 		$userRec->LessonId = $this->request->getData('LessonId');
@@ -1055,7 +1055,7 @@ class ApiController extends AppController {
 		$usersTable = TableRegistry::get('UserLessonTasks');
 				
 		// New rec.
-		$userRec = $usersTable->newEntity();
+		$userRec = $usersTable->newEmptyEntity();
 		$userRec->UserId = $userId;			
 		$userRec->Created = date('Y-m-d H:i:s');		
 		$userRec->Description = $this->request->getData('Description');
