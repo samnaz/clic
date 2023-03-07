@@ -11,10 +11,7 @@ use Cake\Network\Email\Email;
 use Cake\Datasource\ConnectionManager;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\I18n\Time;
-use Cake\Filesystem\Folder;
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST');
-header("Access-Control-Allow-Headers: X-Requested-With, Content-Type");
+use Cake\Filesystem\Folder; 
 class ApiController extends AppController {
 
     public function initialize(): void {
@@ -32,6 +29,7 @@ class ApiController extends AppController {
 						'lessonchatusers', 'userlessontasks']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
+        $this->response->withHeader('crossDomain','true');
 		//this->getEventManager()->off($this->Csrf);
 		// $this->Security->setConfig('unlockedActions', ['Api']);
 		parent::beforeFilter($event);
