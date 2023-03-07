@@ -7,7 +7,7 @@ use Cake\ORM\TableRegistry;
 use Cake\Event\EventInterface;
 use Cake\Controller\Component;
 use Cake\Controller\Component\AuthComponent;
-use Cake\Network\Email\Email;
+use Cake\Mailer\Mailer;
 use Cake\Datasource\ConnectionManager;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\I18n\Time;
@@ -18,7 +18,7 @@ class ApiController extends AppController {
 
         parent::initialize();
         $this->loadComponent('RequestHandler');
-		//$this->loadComponent('Security');
+		$this->loadComponent('Security');
     }
 
     public function beforeFilter(EventInterface $event){
@@ -29,9 +29,13 @@ class ApiController extends AppController {
 						'lessonchatusers', 'userlessontasks']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
-        $this->response->withHeader('crossDomain','true');
-		//this->getEventManager()->off($this->Csrf);
+        //this->getEventManager()->off($this->Csrf);
 		// $this->Security->setConfig('unlockedActions', ['Api']);
+		$this->Security->setConfig('unlockedActions', ['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
+		'register', 'forgotuser', 'logoutuser', 'getparameter', 'login', 'getuser',
+		'updateuser', 'changepassword', 'books','lessons', 'setuserlesson', 'userlessons', 'setusercoins'
+	  , 'usercoins', 'lessontasks', 'lessonchats', 'setlessonchat', 'setuserlessontasks', 
+	  'lessonchatusers', 'userlessontasks']);
 		parent::beforeFilter($event);
     }
 	
@@ -236,36 +240,16 @@ class ApiController extends AppController {
 	* @return 3| Id, Name, LastName
     */
     public function teachers(){
-        if($this->request->is('GET')){
-			//Cache::delete('listbanners');
-			if (($listrates = Cache::read('teachers')) === false) {
-				/*$this->loadModel('Users');
-			    $this->loadModel('Users.UserRols');
-			    $this->set('teachers', $this->Users
-                                ->find('all')
-                                 ->select(['Id' => 'Users.Id'
-                                        , 'RolId' => 'UserRols.RolId'
-                                        , 'Name' => 'Users.Name'
-                                        , 'LastName' => 'Users.LastName'
-                                        ])
-                                    ->contain(['UserRols'])
-                                    ->where(['UserRols.RolId' => 2])
-                                    ->order(['Users.Name' => 'ASC']));
-				*/
-				$connection = ConnectionManager::get('default');
-				$pl = $connection->execute("SELECT U.Id, Name,LastName
-						FROM Users U inner join UserRols UR on U.Id = UR.UserId
-						where RolId = 2
-						ORDER BY
-						  Name, LastName")
-				->fetchAll('assoc');
-				$this->set('teachers', $pl);
-     
-				// Crear cache
-                Cache::write('teachers', $listrates);
-		  }
-		  $this->set('_serialize', ['teachers']);
-        }
+		$connection = ConnectionManager::get('default');
+		$pl = $connection->execute("SELECT U.Id, Name,LastName
+					FROM Users U inner join UserRols UR on U.Id = UR.UserId
+					where RolId = 2
+					ORDER BY
+						Name, LastName")
+			->fetchAll('assoc');
+		$this->set('teachers', $pl);
+    
+		$this->set('_serialize', ['teachers']);
     }
 
 	/*
@@ -288,12 +272,10 @@ class ApiController extends AppController {
     */
     public function contact(){
         if($this->request->is('POST')){
-			$message = "<h2>".$this->request->getData("Titulo")."</h2>";
-			$message .= "<br><b>Nombre: " . $this->request->getData("Nombre");
-			$message .= "<br><b>Apellido: " . $this->request->getData("Apellido");
-			$message .= "<br><b>Email: " . $this->request->getData("Email");
-			$message .= "<br><b>Comentarios: " . $this->request->getData("Comentarios")."</p>";
-
+			$message = $this->request->getData("Titulo")." \r\n\r\nNombre: " . $this->request->getData("Nombre");
+			$message .= "\r\nApellido: " . $this->request->getData("Apellido");
+			$message .= "\r\nEmail: " . $this->request->getData("Email");
+			$message .= "\r\nComentarios: " . $this->request->getData("Comentarios")."\r\nClic";
 			// Buscar el email destino
 			$this->loadModel('Parameters');
 			$p = $this->Parameters->find('all')
@@ -304,16 +286,20 @@ class ApiController extends AppController {
 				   ->order(['Parameters.Id' => 'ASC'])->first();
 
 			// Enviar
-			$email = new Email();
+			/*$email = new Email();
 			$r = $email->from([$this->request->getData("Email") => "Clic"])
 			//$r = $email->from(["info@compratucarro.net.ve" => "Compra Tu Carro"])
              ->to($p->Value)
 			 //->to('lromero@medianet.com.ve')
 			 ->emailFormat('html')
              ->subject('Mensaje en Clic app')
-             ->send($message);
-			$response = ['Respuesta' => $r, 'enviado' => $p->Value];
-
+             ->send($message);*/
+			$mailer = new Mailer('default');
+			$r=$mailer->setTo($p->Value)
+					->setSubject('Mensaje en Clic app')//->setEmailFormat('html')
+					->deliver($message);
+			$response = ['Respuesta' => $r, 'Enviado' => $p->Value];
+			
 			// Respuesta
 			$this->set(compact('response'));
             $this->set('_serialize', ["response"]);
@@ -380,17 +366,23 @@ class ApiController extends AppController {
 					$userTable->save($Id);
 
 					// Salvar en db
-					$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/img/logo.png' alt='Clic'/></div><p>Estimad@: <b>". $queryUser['Name'] ."</b>";
-					$message .= "</p><p>Usted ha solicitado que le sea enviada su contraseña al <b>Email</b>: " . $this->request->getData("Email");
-					$message .= "<br>Su contraseña es: <b>" . $newPass ."</b></p><p>Si usted no hizo esta solicitud contáctenos inmediatamente.</p>";
-
+					$message = "Estimad@: ". $queryUser['Name'] ."\r\n";
+					$message .= "\r\nHas solicitado que te sea modificada tu contraseña asociada al Email: " . $this->request->getData("Email");
+					$message .= "\r\nUsa esta contraseña " . $newPass ." para iniciar sesión\r\nSi no realizaste esta solicitud contáctanos inmediatamente.\r\nRegión SAM";
+					
 					// Enviar mail
-					$email = new Email();
+					/*$email = new Email();
 					$r = $email->from(["no-reply@miedd.samnaz.org" => "Clic"])
 					 ->to($this->request->getData("Email"))
 					 ->emailFormat('html')
 					 ->subject('Recuperación de contraseña')
-					 ->send($message);
+					 ->send($message);*/
+					$mailer = new Mailer('default');
+					$mailer->setFrom(["no-reply@dni.samnaz.org" => "Clic"])
+					->setTo($this->request->getData("Email"))
+					->setSubject('Recuperación de contraseña')//->setEmailFormat('html')
+					->deliver($message);
+				
 					$response = ['Respuesta' => 1, 'enviado' => $userId];
 				}
 			}
@@ -583,18 +575,23 @@ class ApiController extends AppController {
 						// Email
 						if ($this->request->getData("AuthenticationMethodId") =='3'){
 							$varURL = $this->url;
-							$link = "<a href='".$varURL."confirm?code=".$userdocid."&id=".$this->request->getData("Email")."&sec=".strlen($name)."&seed=".date('YmdHis')."&t=".$userId."&x=".($userId*10)."'>aquí</a>";
-							$message = "<div align='center'><img width='300px' src='http://miedd.samnaz.org/img/logo.png' alt='Clic'/></div>Estimad@: <b>". $name . " ". $lastName."</b>";
-							$message .= "<p>Usted se ha registrado en Clic con el <b>Email</b>: " . $this->request->getData("Email");
-							$message .= "<br>Para confirmar su registro haga click <b>" . $link ."</b></p><p>Si usted no hizo este registro contáctenos inmediatamente.</p>";
+							$link = $varURL."confirm?code=".$userdocid."&id=".$this->request->getData("Email")."&sec=".strlen($name)."&seed=".date('YmdHis')."&t=".$userId."&x=".($userId*10);
+							$message = "Estimad@: ". $name . " ". $lastName."\r\n\r\n";
+							$message .= "Usted se ha registrado en Clic con el Email: " . $this->request->getData("Email");
+							$message .= "\r\nPara confirmar su registro use este vínculo " . $link ."\r\n\r\nSi usted no hizo este registro contáctenos inmediatamente.";
 
 							// Enviar mail
-							$email = new Email();
+							/*$email = new Email();
 							$r = $email->from(["no-reply@miedsam.com" => "Clic"])
 							 ->to($this->request->getData("Email"))
 							 ->emailFormat('html')
 							 ->subject('Registro en Clic')
-							 ->send($message);
+							 ->send($message);*/
+							$mailer = new Mailer('default');
+							$mailer->setFrom(["no-reply@dni.samnaz.org" => "Clic"])
+								->setTo($email)
+								->setSubject('Registro en Clic')//->setEmailFormat('html')
+								->deliver($message);
 
 							// Cero para que proceda a confirmar su registro
 							$userId = 0;

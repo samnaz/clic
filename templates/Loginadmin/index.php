@@ -1,7 +1,7 @@
 <?php
     $this->disableAutoLayout();  
 ?>
-<?=$this->Html->docType();?>
+<!DOCTYPE html>
 <html>
 <head>
 <?= $this->Html->charset() ?>

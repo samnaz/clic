@@ -1,7 +1,7 @@
 <?php
     $this->layout = NULL;
     $cakeDescription = 'CakePHP: the rapid development php framework';
-?><?=$this->Html->docType();?>
+?><!DOCTYPE html>
 <html>
 <head>
 <?= $this->Html->charset() ?>
