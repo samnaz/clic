@@ -17,6 +17,7 @@ namespace App\Controller;
 use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Http\Response;
 use Cake\Datasource\ConnectionManager;
 use Cake\Error\Debugger;
 use Cake\Http\Exception\NotFoundException;
@@ -69,6 +70,10 @@ class PagesController extends AppController
             }
             throw new NotFoundException();
         }
+    }
+
+    public function privacity() {
+        
     }
 
     public function beforeFilter(EventInterface $event) {
