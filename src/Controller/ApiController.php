@@ -29,6 +29,7 @@ class ApiController extends AppController {
 						'lessonchatusers', 'userlessontasks']);
 		$this->response->withHeader('Access-Control-Allow-Origin','*');
         $this->response->withHeader('Access-Control-Allow-Methods','*');
+        $this->response->withHeader('Cache-Control','no-cache');
         //this->getEventManager()->off($this->Csrf);
 		// $this->Security->setConfig('unlockedActions', ['Api']);
 		$this->Security->setConfig('unlockedActions', ['countries', 'teachers','edituser', 'liststates', 'index', 'listbanners', 'contact',
